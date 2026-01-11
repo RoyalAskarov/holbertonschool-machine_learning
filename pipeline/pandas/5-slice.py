@@ -8,6 +8,6 @@ def slice(df):
     """
     Slices a DataFrame to specific columns and every 60th row
     """
-    # Select the required columns and step through rows by 60
-    columns = ['High', 'Low', 'Close', 'Volume_BTC']
+    # Note: Using 'Volume_(BTC)' to match the actual CSV header
+    columns = ['High', 'Low', 'Close', 'Volume_(BTC)']
     return df.loc[::60, columns]
