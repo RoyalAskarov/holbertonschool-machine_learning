@@ -2,7 +2,6 @@
 """
 Module that contains a function to fill missing values in a pd.DataFrame
 """
-import pandas as pd
 
 
 def fill(df):
