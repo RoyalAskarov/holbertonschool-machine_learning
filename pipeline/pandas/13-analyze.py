@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Module that contains a function to concatenate and restructure DataFrames
+gfsdesr
 """
-import pandas as pd
 
-def analyze(df: pd.DataFrame) -> pd.DataFrame:
+def analyze(df):
     """
-    jasdiofaodfiopa
+    asdfas
     :param df:
     :return:
     """
@@ -15,6 +14,4 @@ def analyze(df: pd.DataFrame) -> pd.DataFrame:
         df = df.drop(columns=['Timestamp'])
 
     # Compute descriptive statistics
-    stats = df.describe()
-
-    return stats
+    return df.describe()
