@@ -1,34 +1,20 @@
 #!/usr/bin/env python3
 """
-Module that contains a function to visualize a pd.DataFrame
+Module that contains a function to concatenate and restructure DataFrames
 """
-import matplotlib.pyplot as plt
 import pandas as pd
 
-
-def visualize(df):
+def analyze(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Visualizes the price data from 2017 and beyond at daily intervals
+    jasdiofaodfiopa
+    :param df:
+    :return:
     """
-    # 1. Filter the data to only include 2017 and beyond
-    # 1483228800 is the Unix timestamp for 2017-01-01
-    df = df.loc[df.index >= 1483228800]
+    # Drop Timestamp column if it exists
+    if 'Timestamp' in df.columns:
+        df = df.drop(columns=['Timestamp'])
 
-    # 2. Convert the index to datetime objects for readable axis labels
-    df.index = pd.to_datetime(df.index, unit='s')
+    # Compute descriptive statistics
+    stats = df.describe()
 
-    # 3. Resample the data to daily (D) intervals, taking the mean
-    df_daily = df.resample('D').mean()
-
-    # 4. Plot High, Low, Open, and Close
-    # We separate the columns to keep the line length under 79 chars
-    cols = ['High', 'Low', 'Open', 'Close']
-    df_daily[cols].plot()
-
-    # 5. Set the required titles and labels
-    plt.title('Bitcoin Price Analysis')
-    plt.xlabel('Date')
-    plt.ylabel('Price (USD)')
-
-    # Display the plot
-    plt.show()
+    return stats
