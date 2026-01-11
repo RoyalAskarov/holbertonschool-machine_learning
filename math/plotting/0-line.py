@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
+"""This module contains a function that plots a mathematical line graph"""
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def line():
-    """Plots y as a solid red line with x-axis from 0 to 10"""
+    """Plots y as a solid red line with x-axis ranging from 0 to 10"""
     y = np.arange(0, 11) ** 3
     plt.figure(figsize=(6.4, 4.8))
 
