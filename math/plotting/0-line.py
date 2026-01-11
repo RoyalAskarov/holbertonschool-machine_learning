@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def line():
     """Plots y as a solid red line graph with the x-axis ranging from 0 to 10"""
     y = np.arange(0, 11) ** 3
