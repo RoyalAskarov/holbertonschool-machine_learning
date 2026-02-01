@@ -37,7 +37,7 @@ def poly_integral(poly, C=0):
 
     # Requirement: the returned list should be as small as possible
     # This means removing trailing zeros if the original poly ended in zeros
-    # while len(integral) > 1 and integral[-1] == 0:
-    #     integral.pop()
+    while len(integral) > 1 and integral[-1] == 0:
+        integral.pop()
 
     return integral
