@@ -20,7 +20,7 @@ def mat_mul(mat1, mat2):
     cols_mat2 = len(mat2[0])
 
     result = [[0 for _ in range(cols_mat2)]
-            for _ in range(rows_mat1)]
+              for _ in range(rows_mat1)]
 
     for i in range(rows_mat1):
         for j in range(cols_mat2):
