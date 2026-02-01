@@ -10,20 +10,17 @@ def mat_mul(mat1, mat2):
     Args:
         mat1: First 2D list of ints/floats
         mat2: Second 2D list of ints/floats
-    Returns:
-        A new 2D matrix representing the product, or None if incompatible
     """
     # Validation: Columns in mat1 must equal rows in mat2
     if len(mat1[0]) != len(mat2):
         return None
 
-    # Initialize a new matrix with zeros of size (rows of mat1) x (cols of mat2)
-    # result[i][j] = sum(mat1[i][k] * mat2[k][j])
     rows_mat1 = len(mat1)
     cols_mat1 = len(mat1[0])
     cols_mat2 = len(mat2[0])
 
-    result=[[0 for _ in range(cols_mat2)] for _ in range(rows_mat1)]
+    result=[[0 for _ in range(cols_mat2)]
+            for _ in range(rows_mat1)]
 
     for i in range(rows_mat1):
         for j in range(cols_mat2):
