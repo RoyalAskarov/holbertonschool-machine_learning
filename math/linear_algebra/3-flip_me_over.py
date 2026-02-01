@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-adsflkj
+Module to transpose a 2D matrix
 """
 
 
 def matrix_transpose(matrix):
     """
-    adfasfd
-    :param matrix:
-    :return:
+    Returns the transpose of a 2D matrix
     """
-    return [[matrix[i][j] for i in range(len(matrix))] for j in range(len(matrix[0]))]
+    return [[matrix[i][j] for i in range(len(matrix))]
+            for j in range(len(matrix[0]))]
