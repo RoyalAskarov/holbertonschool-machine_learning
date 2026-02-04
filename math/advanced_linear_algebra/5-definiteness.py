@@ -16,7 +16,11 @@ def definiteness(matrix):
         raise TypeError("matrix must be a numpy.ndarray")
 
     # Must be 2D, square, non-empty
-    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1] or matrix.size == 0:
+    if (
+            matrix.ndim != 2
+            or matrix.shape[0] != matrix.shape[1]
+            or matrix.size == 0
+    ):
         return None
 
     # Matrix must be symmetric
