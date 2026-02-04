@@ -23,7 +23,8 @@ def minor(matrix):
         raise TypeError("matrix must be a list of lists")
 
     # 2. Check for Empty List: '[]' is invalid for this specific task
-    # The output shows 'minor(mat5)' where mat5=[] raises "matrix must be a list of lists"
+    # The output shows 'minor(mat5)' where mat5=[] raises
+    # "matrix must be a list of lists"
     if len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
 
@@ -36,7 +37,7 @@ def minor(matrix):
     if n == 0 or not all(len(row) == n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # Helper function to calculate determinant (reused from previous logic)
+    # Helper function to calculate determinant
     def get_determinant(m):
         if len(m) == 1:
             return m[0][0]
@@ -45,13 +46,11 @@ def minor(matrix):
 
         det = 0
         for c in range(len(m)):
-            sub_m = [r[:c] + r[c + 1:] for r in m[1:]]
+            sub_m = [r[:c] + r[c+1:] for r in m[1:]]
             det += ((-1) ** c) * m[0][c] * get_determinant(sub_m)
         return det
 
     # 5. Base Case: 1x1 Matrix
-    # The minor of a 1x1 matrix is implicitly [[1]] in many definitions,
-    # and the output shows 'minor([[5]])' -> [[1]]
     if n == 1:
         return [[1]]
 
@@ -61,7 +60,10 @@ def minor(matrix):
         row_minors = []
         for c in range(n):
             # Create sub-matrix by removing row 'r' and column 'c'
-            sub_matrix = [row[:c] + row[c + 1:] for i, row in enumerate(matrix) if i != r]
+            sub_matrix = [
+                row[:c] + row[c + 1:]
+                for i, row in enumerate(matrix) if i != r
+            ]
 
             # Calculate determinant of sub-matrix
             det = get_determinant(sub_matrix)
