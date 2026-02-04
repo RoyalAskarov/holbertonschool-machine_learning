@@ -17,54 +17,49 @@ def definiteness(matrix):
              'Positive semi-definite', 'Negative semi-definite',
              'Negative definite', 'Indefinite').
         None: If the matrix is not valid or does not fit a category.
-
-    Raises:
-        TypeError: If matrix is not a numpy.ndarray.
     """
     # 1. Type Check: Ensure matrix is a numpy.ndarray
     if not isinstance(matrix, np.ndarray):
         raise TypeError("matrix must be a numpy.ndarray")
 
     # 2. Validity Check:
-    # - Must be 2-dimensional (handles empty array np.array([]) which is 1D)
+    # - Must be 2-dimensional
     # - Must be square (rows == cols)
-    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
+    # - Must NOT be empty (size 0) -> This fixes the error
+    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1] or matrix.size == 0:
         return None
 
     # 3. Calculate Eigenvalues
-    # We calculate the eigenvalues to check the definiteness properties.
     try:
         w = np.linalg.eigvals(matrix)
     except Exception:
         return None
 
     # 4. Handle Complex Eigenvalues
-    # Definiteness categories generally apply to matrices with real eigenvalues
-    # (e.g., symmetric matrices). If eigenvalues are complex, return None.
+    # If eigenvalues are complex (and not just real numbers stored as complex),
+    # the matrix doesn't fit the standard real definiteness categories.
     if np.iscomplexobj(w) and not np.all(np.isreal(w)):
         return None
 
-    # Ensure we are working with the real parts (floating point precision)
+    # Convert to real numbers for comparison
     w = np.real(w)
 
-    # 5. Determine Definiteness based on signs of eigenvalues
-    # Check strictly positive first
+    # 5. Determine Definiteness
+    # strictly positive
     if np.all(w > 0):
         return "Positive definite"
 
-    # Check non-negative
+    # positive or zero
     if np.all(w >= 0):
         return "Positive semi-definite"
 
-    # Check strictly negative
+    # strictly negative
     if np.all(w < 0):
         return "Negative definite"
 
-    # Check non-positive
+    # negative or zero
     if np.all(w <= 0):
         return "Negative semi-definite"
 
-    # If eigenvalues have mixed signs (some positive, some negative)
-    # and none of the above conditions were met, it is Indefinite.
-    # (e.g., eigenvalues like [3, -1])
+    # Mixed signs
     return "Indefinite"
