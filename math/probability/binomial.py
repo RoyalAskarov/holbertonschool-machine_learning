@@ -63,10 +63,8 @@ class Binomial:
         Returns:
             float: The PMF value for k.
         """
-        # Convert k to integer
         k = int(k)
 
-        # Check if k is out of range
         if k < 0 or k > self.n:
             return 0
 
@@ -88,7 +86,28 @@ class Binomial:
         # Calculate binomial coefficient (n choose k)
         combination = n_factorial / (k_factorial * nk_factorial)
 
-        # Calculate PMF: (nCk) * (p^k) * (q^(n-k))
+        # Calculate PMF
         pmf_val = combination * (self.p ** k) * ((1 - self.p) ** (self.n - k))
 
         return pmf_val
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of "successes".
+
+        Args:
+            k (int): The number of successes.
+
+        Returns:
+            float: The CDF value for k.
+        """
+        k = int(k)
+
+        if k < 0 or k > self.n:
+            return 0
+
+        cdf_val = 0
+        for i in range(k + 1):
+            cdf_val += self.pmf(i)
+
+        return cdf_val
