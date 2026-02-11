@@ -49,7 +49,6 @@ class Normal:
         Returns:
             float: The z-score of x.
         """
-        # Formula: z = (x - mean) / stddev
         return (x - self.mean) / self.stddev
 
     def x_value(self, z):
@@ -62,5 +61,33 @@ class Normal:
         Returns:
             float: The x-value of z.
         """
-        # Formula: x = (z * stddev) + mean
         return (z * self.stddev) + self.mean
+
+    def pdf(self, x):
+        """
+        Calculates the value of the PDF for a given x-value.
+
+        Args:
+            x: The x-value.
+
+        Returns:
+            float: The PDF value for x.
+        """
+        e = 2.7182818285
+        pi = 3.1415926536
+
+        # Formula: f(x) = (1 / (stddev * sqrt(2*pi))) * e^(-0.5 * ((x-mean)/stddev)^2)
+
+        # Calculate the coefficient term (1 / (σ * √2π))
+        denominator = self.stddev * ((2 * pi) ** 0.5)
+        coefficient = 1 / denominator
+
+        # Calculate the exponent term (-1/2 * ((x-μ)/σ)^2)
+        # Note: (x - mean) / stddev is the z-score
+        z = (x - self.mean) / self.stddev
+        exponent = -0.5 * (z ** 2)
+
+        # Combine
+        pdf_val = coefficient * (e ** exponent)
+
+        return pdf_val
