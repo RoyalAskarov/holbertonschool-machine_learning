@@ -27,7 +27,5 @@ class Exponential:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
 
-            # Calculate lambtha from data
-            # For Exponential distribution, lambtha is the inverse of the mean (1 / mean)
             mean = sum(data) / len(data)
             self.lambtha = float(1 / mean)
