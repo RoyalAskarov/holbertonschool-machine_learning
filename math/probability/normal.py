@@ -100,7 +100,6 @@ class Normal:
         stddev = self.stddev
         pi = 3.1415926536
 
-        # Calculate the argument for the error function: (x - mean) / (stddev * sqrt(2))
         k = (x - mean) / (stddev * (2 ** 0.5))
 
         # Approximate erf(k) using the first 5 terms of the Maclaurin series
