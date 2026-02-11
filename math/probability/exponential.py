@@ -41,13 +41,30 @@ class Exponential:
         Returns:
             float: The PDF value for x.
         """
-        # The domain of an Exponential distribution is x >= 0
+        if x < 0:
+            return 0
+
+        e = 2.7182818285
+        pdf_val = self.lambtha * (e ** (-self.lambtha * x))
+
+        return pdf_val
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given time period.
+
+        Args:
+            x: The time period.
+
+        Returns:
+            float: The CDF value for x.
+        """
         if x < 0:
             return 0
 
         e = 2.7182818285
 
-        # Formula: f(x) = lambtha * e^(-lambtha * x)
-        pdf_val = self.lambtha * (e ** (-self.lambtha * x))
+        # Formula: F(x) = 1 - e^(-lambtha * x)
+        cdf_val = 1 - (e ** (-self.lambtha * x))
 
-        return pdf_val
+        return cdf_val
