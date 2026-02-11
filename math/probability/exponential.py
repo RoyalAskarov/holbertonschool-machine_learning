@@ -27,5 +27,27 @@ class Exponential:
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
 
+            # Calculate lambtha from data (1 / mean)
             mean = sum(data) / len(data)
             self.lambtha = float(1 / mean)
+
+    def pdf(self, x):
+        """
+        Calculates the value of the PDF for a given time period.
+
+        Args:
+            x: The time period.
+
+        Returns:
+            float: The PDF value for x.
+        """
+        # The domain of an Exponential distribution is x >= 0
+        if x < 0:
+            return 0
+
+        e = 2.7182818285
+
+        # Formula: f(x) = lambtha * e^(-lambtha * x)
+        pdf_val = self.lambtha * (e ** (-self.lambtha * x))
+
+        return pdf_val
