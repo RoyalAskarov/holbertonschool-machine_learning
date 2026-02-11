@@ -8,6 +8,7 @@ class Normal:
     """
     Represents a normal distribution.
     """
+
     def __init__(self, data=None, mean=0., stddev=1.):
         """
         Initializes the Normal distribution.
@@ -27,13 +28,17 @@ class Normal:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
+
             # Calculate mean
             self.mean = float(sum(data) / len(data))
+
             # Calculate standard deviation
             sum_squared_diff = 0
             for x in data:
                 sum_squared_diff += (x - self.mean) ** 2
+
             self.stddev = float((sum_squared_diff / len(data)) ** 0.5)
+
     def z_score(self, x):
         """
         Calculates the z-score of a given x-value.
@@ -70,6 +75,8 @@ class Normal:
         """
         e = 2.7182818285
         pi = 3.1415926536
+
+        # Formula: f(x) = (1 / (stddev * sqrt(2*pi))) * e^(-0.5 * ((x-mean)/stddev)^2)
 
         # Calculate the coefficient term (1 / (σ * √2π))
         denominator = self.stddev * ((2 * pi) ** 0.5)
