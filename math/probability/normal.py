@@ -2,6 +2,7 @@
 """
 Normal distribution class
 """
+import math
 
 
 class Normal:
@@ -76,16 +77,30 @@ class Normal:
         e = 2.7182818285
         pi = 3.1415926536
 
-        # Calculate the coefficient term (1 / (σ * √2π))
         denominator = self.stddev * ((2 * pi) ** 0.5)
         coefficient = 1 / denominator
 
-        # Calculate the exponent term (-1/2 * ((x-μ)/σ)^2)
-        # Note: (x - mean) / stddev is the z-score
         z = (x - self.mean) / self.stddev
         exponent = -0.5 * (z ** 2)
 
-        # Combine
         pdf_val = coefficient * (e ** exponent)
 
         return pdf_val
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given x-value.
+
+        Args:
+            x: The x-value.
+
+        Returns:
+            float: The CDF value for x.
+        """
+        # Calculate z-score: (x - mean) / stddev
+        z = (x - self.mean) / self.stddev
+
+        # Formula: CDF(x) = 0.5 * (1 + erf(z / sqrt(2)))
+        cdf_val = 0.5 * (1 + math.erf(z / (2 ** 0.5)))
+
+        return cdf_val
