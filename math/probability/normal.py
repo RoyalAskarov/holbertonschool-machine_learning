@@ -76,7 +76,6 @@ class Normal:
         e = 2.7182818285
         pi = 3.1415926536
 
-        # Formula: f(x) = (1 / (stddev * sqrt(2*pi))) * e^(-0.5 * ((x-mean)/stddev)^2)
 
         # Calculate the coefficient term (1 / (σ * √2π))
         denominator = self.stddev * ((2 * pi) ** 0.5)
