@@ -29,3 +29,35 @@ class Poisson:
 
             # Calculate lambtha from data (mean of the data)
             self.lambtha = float(sum(data) / len(data))
+
+    def pmf(self, k):
+        """
+        Calculates the value of the PMF for a given number of "successes".
+
+        Args:
+            k (int): The number of successes.
+
+        Returns:
+            float: The PMF value for k.
+        """
+        # If k is not an integer, convert it to an integer
+        if not isinstance(k, int):
+            k = int(k)
+
+        # If k is out of range (Poisson must be non-negative), return 0
+        if k < 0:
+            return 0
+
+        # Calculate factorial of k (k!)
+        factorial_k = 1
+        for i in range(1, k + 1):
+            factorial_k *= i
+
+        # Euler's number approximation
+        e = 2.7182818285
+
+        # Calculate PMF: (e^-lambtha * lambtha^k) / k!
+        # breakdown: (e ** -self.lambtha) * (self.lambtha ** k) / factorial_k
+        pmf_val = (e ** -self.lambtha) * (self.lambtha ** k) / factorial_k
+
+        return pmf_val
