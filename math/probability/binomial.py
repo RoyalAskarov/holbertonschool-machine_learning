@@ -42,7 +42,6 @@ class Binomial:
             variance = float(sum_squared_diff / len(data))
 
             # Estimate p (p = 1 - (variance / mean))
-            # Derived from: Mean = np, Var = np(1-p) -> Var/Mean = 1-p
             p_estimate = 1 - (variance / mean)
 
             # Estimate n (n = Mean / p)
@@ -51,5 +50,45 @@ class Binomial:
             # Round n to the nearest integer
             self.n = int(round(n_estimate))
 
-            # Recalculate p using the rounded n to ensure Mean = np holds
+            # Recalculate p using the rounded n
             self.p = float(mean / self.n)
+
+    def pmf(self, k):
+        """
+        Calculates the value of the PMF for a given number of "successes".
+
+        Args:
+            k (int): The number of successes.
+
+        Returns:
+            float: The PMF value for k.
+        """
+        # Convert k to integer
+        k = int(k)
+
+        # Check if k is out of range
+        if k < 0 or k > self.n:
+            return 0
+
+        # Calculate factorial n!
+        n_factorial = 1
+        for i in range(1, self.n + 1):
+            n_factorial *= i
+
+        # Calculate factorial k!
+        k_factorial = 1
+        for i in range(1, k + 1):
+            k_factorial *= i
+
+        # Calculate factorial (n-k)!
+        nk_factorial = 1
+        for i in range(1, (self.n - k) + 1):
+            nk_factorial *= i
+
+        # Calculate binomial coefficient (n choose k)
+        combination = n_factorial / (k_factorial * nk_factorial)
+
+        # Calculate PMF: (nCk) * (p^k) * (q^(n-k))
+        pmf_val = combination * (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+        return pmf_val
