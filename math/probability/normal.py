@@ -2,7 +2,6 @@
 """
 Normal distribution class
 """
-import math
 
 
 class Normal:
@@ -97,10 +96,24 @@ class Normal:
         Returns:
             float: The CDF value for x.
         """
-        # Calculate z-score: (x - mean) / stddev
-        z = (x - self.mean) / self.stddev
+        mean = self.mean
+        stddev = self.stddev
+        pi = 3.1415926536
 
-        # Formula: CDF(x) = 0.5 * (1 + erf(z / sqrt(2)))
-        cdf_val = 0.5 * (1 + math.erf(z / (2 ** 0.5)))
+        # Calculate the argument for the error function: (x - mean) / (stddev * sqrt(2))
+        k = (x - mean) / (stddev * (2 ** 0.5))
+
+        # Approximate erf(k) using the first 5 terms of the Maclaurin series
+        # erf(k) ≈ (2/sqrt(pi)) * (k - k^3/3 + k^5/10 - k^7/42 + k^9/216)
+        term1 = k
+        term2 = (k ** 3) / 3
+        term3 = (k ** 5) / 10
+        term4 = (k ** 7) / 42
+        term5 = (k ** 9) / 216
+
+        erf_val = (2 / (pi ** 0.5)) * (term1 - term2 + term3 - term4 + term5)
+
+        # CDF = 0.5 * (1 + erf(k))
+        cdf_val = 0.5 * (1 + erf_val)
 
         return cdf_val
