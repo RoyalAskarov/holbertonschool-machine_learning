@@ -36,7 +36,6 @@ def intersection(x, n, P, Pr):
     if not np.isclose(np.sum(Pr), 1):
         raise ValueError("Pr must sum to 1")
 
-    # 1. Calculate Likelihood using Binomial PMF: (n choose x) * p^x * (1-p)^(n-x)
     # Using np.math.factorial for the binomial coefficient
     fact = np.math.factorial
     n_cr = fact(n) / (fact(x) * fact(n - x))
