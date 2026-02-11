@@ -7,7 +7,8 @@ import numpy as np
 
 def likelihood(x, n, P):
     """
-    Calculates the likelihood of obtaining data x and n for each probability in P
+    Calculates the likelihood of obtaining data x and n for each
+    probability in P
     """
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
