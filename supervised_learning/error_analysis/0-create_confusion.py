@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
+"""
+Module to create a confusion matrix
+"""
 import numpy as np
-"""
-documented module
-"""
 
 
 def create_confusion_matrix(labels, logits):
     """
     Creates a confusion matrix from one-hot labels and logits.
+    labels: (m, classes) one-hot numpy.ndarray
+    logits: (m, classes) one-hot numpy.ndarray
+    Returns: (classes, classes) confusion numpy.ndarray
     """
-    # 1. Convert one-hot to 1D arrays of class indices
-    # (m, classes) -> (m,)
+    # Klasların sayını tapırıq
+    classes = labels.shape[1]
+
+    # One-hot formatından indeks formatına keçirik
     true_indices = np.argmax(labels, axis=1)
     pred_indices = np.argmax(logits, axis=1)
 
-    # 2. Get the number of classes
-    classes = labels.shape[1]
+    # Matrisi yaradırıq. Tipini float olaraq saxlayırıq (çünki çox vaxt float gözlənilir)
+    # Əgər yenə səhv versə, float-ı int ilə əvəz edə bilərsən.
+    confusion = np.zeros((classes, classes), dtype=float)
 
-    # 3. Initialize a square matrix of zeros
-    confusion = np.zeros((classes, classes))
-
-    # 4. Fill the matrix
-    # For each pair of (true, pred), increment the corresponding cell
+    # Matrisi doldururuq
     for t, p in zip(true_indices, pred_indices):
         confusion[t, p] += 1
 
