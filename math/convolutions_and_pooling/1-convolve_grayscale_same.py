@@ -20,13 +20,13 @@ def convolve_grayscale_same(images, kernel):
     kh, kw = kernel.shape
 
     # Calculate padding needed to keep dimensions the same
-    # Use // 2 for integer division (works for odd kernel sizes)
     ph = kh // 2
     pw = kw // 2
 
-    # Apply zero padding to the height and width dimensions
-    # np.pad(array, ((batch), (height), (width)), mode)
-    images_padded = np.pad(images, ((0, 0), (ph, ph), (pw, pw)), mode='constant')
+    # Apply zero padding - wrapped to satisfy pycodestyle E501
+    images_padded = np.pad(
+        images, ((0, 0), (ph, ph), (pw, pw)), mode='constant'
+    )
 
     # Initialize output with original dimensions
     convolved = np.zeros((m, h, w))
