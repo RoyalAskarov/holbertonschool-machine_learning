@@ -13,46 +13,42 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     kh, kw, kc, nc = kernels.shape
     sh, sw = stride
 
+    assert c == kc, "Channels must match"
+
+    # Padding
     if padding == 'same':
-        ph = ((h - 1) * sh + kh - h) // 2 + (kh % 2 == 0)
-        pw = ((w - 1) * sw + kw - w) // 2 + (kw % 2 == 0)
+        ph = ((h - 1) * sh + kh - h) // 2 + 1
+        pw = ((w - 1) * sw + kw - w) // 2 + 1
     elif padding == 'valid':
         ph, pw = 0, 0
     else:
         ph, pw = padding
 
-    # Apply padding
+    # Pad images
     images_padded = np.pad(
         images,
         ((0, 0), (ph, ph), (pw, pw), (0, 0)),
         mode='constant'
     )
 
-    # Calculate output dimensions
-    out_h = ((h + 2 * ph - kh) // sh) + 1
-    out_w = ((w + 2 * pw - kw) // sw) + 1
+    # Output dimensions
+    h_out = (h + 2 * ph - kh) // sh + 1
+    w_out = (w + 2 * pw - kw) // sw + 1
 
-    # Initialize output array
-    convolved = np.zeros((m, out_h, out_w, nc))
+    output = np.zeros((m, h_out, w_out, nc))
 
-    # Perform convolution
-    for i in range(out_h):
-        for j in range(out_w):
-            h_start, w_start = i * sh, j * sw
-            # Slice window
-            image_slice = images_padded[
-                :,
-                h_start:h_start + kh,
-                w_start:w_start + kw,
-                :
-            ]
-
-            # Loop through each kernel
+    # Convolution (ONLY 3 loops)
+    for i in range(h_out):
+        for j in range(w_out):
             for k in range(nc):
-                # Sum across height, width, and channels
-                convolved[:, i, j, k] = np.sum(
-                    image_slice * kernels[..., k],
-                    axis=(1, 2, 3)
-                )
+                h_start = i * sh
+                h_end = h_start + kh
+                w_start = j * sw
+                w_end = w_start + kw
 
-    return convolved
+                slice_img = images_padded[:, h_start:h_end, w_start:w_end, :]
+                kernel = kernels[:, :, :, k]
+
+                output[:, i, j, k] = np.sum(slice_img * kernel, axis=(1, 2, 3))
+
+    return output
