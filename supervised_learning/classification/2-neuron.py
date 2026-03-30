@@ -3,6 +3,11 @@
 import numpy as np
 
 
+def sigmoid(x):
+    """The sigmoid function."""
+    return 1 / (1 + np.e ** -x)
+
+
 class Neuron:
     """An artificial neuron."""
 
@@ -33,10 +38,24 @@ class Neuron:
 
     @property
     def W(self):
-        """The weights vector."""
+        """The weights row vector."""
         return self.__W
 
     @property
     def b(self):
         """The bias of the Neuron."""
         return self.__b
+
+    def forward_prop(self, X):
+        """
+        Calculates the forward propagation of the Neuron.
+
+        Args:
+            X: The input matrix. Consists of all input vectors of each training
+                example.
+        """
+        # activation = activation_function(weight_vector * input_matrix + bias)
+        Z = self.W @ X + self.b
+        self.__A = sigmoid(Z)
+
+        return self.__A
