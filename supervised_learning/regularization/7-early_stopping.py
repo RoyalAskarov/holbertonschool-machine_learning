@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
-"""Defines `early_stopping`."""
+"""Early Stopping"""
 
 
 def early_stopping(cost, opt_cost, threshold, patience, count):
+    """Determining if gradient descent should stop early
+    cost:      current validation cost
+    opt_cost:  lowest recorded validation cost
+    threshold: threshold for early stopping
+    patience:  patience count
+    count:     how long threshold has not been met
+    Returns:   (should_stop, updated_count)
     """
-    Determines if gradient descent should halt early.
-
-    Early stopping occurs when the validation cost of the network has not
-    decreased relative to the optimal validation cost by more than the
-    threshold over a specific patience count.
-
-    cost: The current validation cost of the neural network.
-    opt_cost: The lowest recorded validation cost of the neural network.
-    threshold: The threshold used for early stopping.
-    patience: The patience count used for early stopping.
-    count: The count of how long the threshold has not been met.
-
-    Returns: A boolean of whether the network should be stopped early, followed
-        by the updated count.
-    """
-    if count >= patience:
-        return (True, count)
-    elif opt_cost - cost > threshold:
-        return (False, 0)
-    count += 1
-    if count >= patience:
-        return (True, count)
+    if opt_cost - cost > threshold:
+        # cost improved enough → reset count
+        count = 0
     else:
-        return (False, count)
+        # cost did not improve enough → increment count
+        count += 1
+
+    # stop if count reached patience
+    if count >= patience:
+        return True, count
+
+    return False, count

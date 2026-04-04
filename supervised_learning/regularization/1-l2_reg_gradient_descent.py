@@ -1,31 +1,36 @@
 #!/usr/bin/env python3
-"""Defines `l2_reg_gradient_descent`."""
+
+"""Gradient Descent with L2 Regularization"""
 import numpy as np
 
 
 def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
+    """Updating weights and biases using gradient descent with L2 reg
+    Y:       one-hot numpy.ndarray of shape (classes, m)
+    weights: dictionary of weights and biases
+    cache:   dictionary of outputs of each layer
+    alpha:   learning rate
+    lambtha: L2 regularization parameter
+    L:       number of layers
     """
-    Updates the weights and biases of a neural network using gradient descent
-    with L2 regularization:
+    m = Y.shape[1]
+    # output layer gradient (softmax)
+    dZ = cache['A' + str(L)] - Y
 
-    Y: A one-hot numpy.ndarray of shape (classes, m) that contains the correct
-        labels for the data where "classes" is the number of classes and "m" is
-        the number of data points
-    weights: A dictionary of the weights and biases of the neural network.
-    cache: A dictionary of the outputs of each layer of the neural network.
-    alpha: The learning rate.
-    lambtha: The L2 regularization parameter.
-    L: The number of layers of the network.
-    """
-    m = len(Y[0])
-    dz2 = cache["A" + str(L)] - Y
-    for layer in range(L, 0, -1):
-        A = cache["A" + str(layer - 1)]
-        W = weights["W" + str(layer)]
-        dz1 = W.T @ dz2 * (1 - A * A)
-        dw = dz2 @ A.T / m
-        dw += W * lambtha / m
-        db = np.mean(dz2, axis=1, keepdims=True)
-        dz2 = dz1
-        weights["W" + str(layer)] -= alpha * dw
-        weights["b" + str(layer)] -= alpha * db
+    for i in range(L, 0, -1):
+        A_prev = cache['A' + str(i - 1)]
+        W = weights['W' + str(i)]
+        b = weights['b' + str(i)]
+
+        # weight gradient with L2 penalty
+        dW = (1 / m) * np.matmul(dZ, A_prev.T) + (lambtha / m) * W
+        # bias gradient — no L2 penalty
+        db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+
+        # backprop through tanh for previous layer
+        if i > 1:
+            dZ = np.matmul(W.T, dZ) * (1 - A_prev ** 2)
+
+        # update weights and biases in place
+        weights['W' + str(i)] = W - alpha * dW
+        weights['b' + str(i)] = b - alpha * db
