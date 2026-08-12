@@ -1,30 +1,39 @@
 #!/usr/bin/env python3
-""" Defines `play`. """
+"""Defines the `play` function for a trained agent on FrozenLake."""
 import numpy as np
 
 
-def play(env, Q_table, max_steps=100):
-    """
-    Plays an episode of Frozen Lake using a trained agent.
+def play(env, Q, max_steps=100):
+    """Plays an episode of Frozen Lake using a trained agent exploiting Q.
 
-    env: The FrozenLakeEnv instance.
-    Q_table: A `numpy.ndarray` representing the Q-table.
-    max_steps: The maximum number of steps in the episode.
+    Args:
+        env: The FrozenLakeEnv instance.
+        Q: A numpy.ndarray containing the Q-table.
+        max_steps: Maximum number of steps in the episode.
 
-    Returns: The total rewards for the episode.
+    Returns:
+        total_rewards: Total rewards for the episode.
+        rendered_outputs: List of rendered outputs representing board states.
     """
+    rendered_outputs = []
+
+    # Reset environment and capture initial state/render
     state, _ = env.reset()
+    rendered_outputs.append(env.render())
 
-    for _step in range(max_steps):
-        print(env.render(), end='')
+    total_rewards = 0.0
 
-        action = np.argmax(Q_table[state])
+    for _ in range(max_steps):
+        # Always exploit the Q-table
+        action = np.argmax(Q[state])
 
-        state, reward, terminated, truncated, _info = env.step(action)
+        state, reward, terminated, truncated, _ = env.step(action)
+        total_rewards += reward
+
+        # Record board state after taking the step
+        rendered_outputs.append(env.render())
 
         if terminated or truncated:
             break
 
-    print(env.render(), end='')
-
-    return reward
+    return total_rewards, rendered_outputs
