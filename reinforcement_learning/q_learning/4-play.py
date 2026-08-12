@@ -1,40 +1,44 @@
 #!/usr/bin/env python3
-
+"""Defines the `play` function for a trained agent on FrozenLake."""
 import numpy as np
 
 
 def play(env, Q, max_steps=100):
-    """
-    Plays an episode using the trained Q-table.
-
-    Args:
-        env: FrozenLakeEnv instance
-        Q: Q-table
-        max_steps: Maximum number of steps.
-
-    Returns:
-        The total rewards and a list of rendered outputs.
-    """
-    total_rewards = 0
+    """Plays an episode of Frozen Lake using a trained agent exploiting Q."""
     rendered_outputs = []
 
-    # Render initial state
-    rendered_outputs.append(env.render())
+    # Safely handle env.reset() for both Gym (returns int) and Gymnasium (returns tuple)
+    reset_val = env.reset()
+    state = reset_val[0] if isinstance(reset_val, tuple) else reset_val
+
+    # Safely handle render
+    try:
+        rendered_outputs.append(env.render(mode='ansi'))
+    except (TypeError, Exception):
+        rendered_outputs.append(env.render())
+
+    total_rewards = 0.0
 
     for _ in range(max_steps):
-        # Always exploit the Q-table
-        state = env.unwrapped.s
         action = np.argmax(Q[state])
 
-        # Take action
-        _, reward, terminated, truncated, _ = env.step(action)
+        step_val = env.step(action)
+
+        # Safely handle env.step() for both Gym (4 items) and Gymnasium (5 items)
+        if len(step_val) == 4:
+            state, reward, done, _info = step_val
+        else:
+            state, reward, terminated, truncated, _info = step_val
+            done = terminated or truncated
 
         total_rewards += reward
 
-        # Render current state
-        rendered_outputs.append(env.render())
+        try:
+            rendered_outputs.append(env.render(mode='ansi'))
+        except (TypeError, Exception):
+            rendered_outputs.append(env.render())
 
-        if terminated or truncated:
+        if done:
             break
 
     return total_rewards, rendered_outputs
