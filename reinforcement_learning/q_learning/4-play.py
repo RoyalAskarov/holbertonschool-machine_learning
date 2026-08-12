@@ -1,39 +1,39 @@
 #!/usr/bin/env python3
+
 import numpy as np
 
 
 def play(env, Q, max_steps=100):
     """
-    Has a trained agent play an episode.
+    Plays an episode using the trained Q-table.
 
     Args:
         env: FrozenLakeEnv instance
         Q: Q-table
-        max_steps: Maximum number of steps
+        max_steps: Maximum number of steps.
 
     Returns:
-        total_rewards: Total rewards for the episode
-        rendered_outputs: List of rendered board states
+        The total rewards and a list of rendered outputs.
     """
-    rendered_outputs = []
     total_rewards = 0
+    rendered_outputs = []
 
-    # Display the initial state
+    # Render initial state
     rendered_outputs.append(env.render())
 
     for _ in range(max_steps):
-        # Always exploit: choose the action with the highest Q-value
-        action = np.argmax(Q[env.unwrapped.s])
+        # Always exploit the Q-table
+        state = env.unwrapped.s
+        action = np.argmax(Q[state])
 
-        # Take the action
+        # Take action
         _, reward, terminated, truncated, _ = env.step(action)
 
         total_rewards += reward
 
-        # Render the new state
+        # Render current state
         rendered_outputs.append(env.render())
 
-        # Stop if the episode has ended
         if terminated or truncated:
             break
 
