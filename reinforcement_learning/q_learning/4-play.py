@@ -5,38 +5,31 @@ import numpy as np
 
 def play(env, Q, max_steps=100):
     """Plays an episode of Frozen Lake using a trained agent exploiting Q."""
-    rendered_outputs = []
 
-    # Safely handle env.reset() for both Gym (returns int) and Gymnasium (returns tuple)
+    # Reset environment safely
     reset_val = env.reset()
+    # Handle both Gymnasium (returns tuple) and older Gym (returns int)
     state = reset_val[0] if isinstance(reset_val, tuple) else reset_val
 
-    # Safely handle render
-    try:
-        rendered_outputs.append(env.render(mode='ansi'))
-    except (TypeError, Exception):
-        rendered_outputs.append(env.render())
+    rendered_outputs = [env.render()]
 
     total_rewards = 0.0
 
     for _ in range(max_steps):
+        # Always exploit the Q-table
         action = np.argmax(Q[state])
 
         step_val = env.step(action)
 
-        # Safely handle env.step() for both Gym (4 items) and Gymnasium (5 items)
-        if len(step_val) == 4:
-            state, reward, done, _info = step_val
-        else:
-            state, reward, terminated, truncated, _info = step_val
+        # Unpack safely for both Gymnasium (5 variables) and Gym (4 variables)
+        if len(step_val) == 5:
+            state, reward, terminated, truncated, _ = step_val
             done = terminated or truncated
+        else:
+            state, reward, done, _ = step_val
 
         total_rewards += reward
-
-        try:
-            rendered_outputs.append(env.render(mode='ansi'))
-        except (TypeError, Exception):
-            rendered_outputs.append(env.render())
+        rendered_outputs.append(env.render())
 
         if done:
             break
