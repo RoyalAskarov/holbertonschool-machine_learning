@@ -13,20 +13,18 @@ def play(env, Q_table, max_steps=100):
 
     Returns: The total rewards for the episode.
     """
-    # Each state of the board should be displayed via the console
-    # You should always exploit the Q-table
-    state = env.reset()
+    state, _ = env.reset()
 
     for _step in range(max_steps):
-        print(env.render(mode='ansi'), end='')
+        print(env.render(), end='')
 
         action = np.argmax(Q_table[state])
 
-        state, reward, done, _info = env.step(action)
+        state, reward, terminated, truncated, _info = env.step(action)
 
-        if done:
+        if terminated or truncated:
             break
 
-    print(env.render(mode='ansi'), end='')
+    print(env.render(), end='')
 
     return reward
