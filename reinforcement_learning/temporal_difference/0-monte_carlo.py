@@ -36,16 +36,10 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
                 break
             state = next_state
 
-        # Calculate returns and update V (First-visit Monte Carlo)
-        episode_states = [step[0] for step in episode]
+        # Calculate returns and update V (Every-visit Monte Carlo)
         G = 0
-
-        for i in range(len(episode) - 1, -1, -1):
-            s, r = episode[i]
+        for s, r in reversed(episode):
             G = gamma * G + r
-
-            # Check if it is the first visit to the state in this episode
-            if s not in episode_states[:i]:
-                V[s] = V[s] + alpha * (G - V[s])
+            V[s] = V[s] + alpha * (G - V[s])
 
     return V
