@@ -2,6 +2,7 @@
 """
 Monte Carlo evaluation module.
 """
+import numpy as np
 
 
 def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
@@ -47,4 +48,4 @@ def monte_carlo(env, V, policy, episodes=5000, max_steps=100,
             if s not in episode_states[:i]:
                 V[s] = V[s] + alpha * (G - V[s])
 
-    return
+    return V
