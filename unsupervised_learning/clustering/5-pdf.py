@@ -25,16 +25,18 @@ def pdf(X, m, S):
         return None
 
     try:
-        L = np.linalg.cholesky(S)
+        det = np.linalg.det(S)
+        if det <= 0:
+            return None
+
+        inv = np.linalg.inv(S)
         centered = X - m
-        transformed = np.linalg.solve(L, centered.T)
-        squared_distances = np.sum(transformed ** 2, axis=0)
-        _, log_det = np.linalg.slogdet(S)
+        exponent = -0.5 * np.sum(
+            np.matmul(centered, inv) * centered, axis=1
+        )
+        denominator = np.sqrt((2 * np.pi) ** d * det)
+        P = np.exp(exponent) / denominator
     except (np.linalg.LinAlgError, TypeError, ValueError):
         return None
 
-    log_P = -0.5 * (
-        d * np.log(2 * np.pi) + log_det + squared_distances
-    )
-    P = np.exp(log_P)
     return np.maximum(P, 1e-300)
