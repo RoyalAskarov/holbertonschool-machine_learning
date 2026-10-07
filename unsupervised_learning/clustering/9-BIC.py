@@ -32,7 +32,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5,
     if kmax is None:
         kmax = n
 
-    if type(kmax) is not int or kmax < kmin or kmax > n:
+    if type(kmax) is not int or kmax <= kmin or kmax > n:
         return failure
     if type(iterations) is not int or iterations <= 0:
         return failure
