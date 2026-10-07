@@ -17,7 +17,7 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5,
         m: Cluster means of shape (k, d).
         S: Covariance matrices of shape (k, d, d).
         g: Posterior probabilities of shape (k, n).
-        l: Total log likelihood.
+        log_likelihood: Total log likelihood.
         (None, None, None, None, None) on invalid input or failure.
     """
     failure = (None, None, None, None, None)
@@ -39,25 +39,32 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5,
     if pi is None or m is None or S is None:
         return failure
 
-    previous_l = None
+    previous_log_likelihood = None
 
     for i in range(iterations + 1):
-        g, l = expectation(X, pi, m, S)
-        if g is None or l is None or not np.isfinite(l):
+        g, log_likelihood = expectation(X, pi, m, S)
+        if g is None or log_likelihood is None:
+            return failure
+        if not np.isfinite(log_likelihood):
             return failure
 
         converged = (
-            previous_l is not None and abs(l - previous_l) <= tol
+            previous_log_likelihood is not None
+            and abs(log_likelihood - previous_log_likelihood) <= tol
         )
         finished = converged or i == iterations
 
         if verbose and (i % 10 == 0 or finished):
-            print("Log Likelihood after {} iterations: {:.5f}".format(i, l))
+            print(
+                "Log Likelihood after {} iterations: {:.5f}".format(
+                    i, log_likelihood
+                )
+            )
 
         if finished:
-            return pi, m, S, g, l
+            return pi, m, S, g, log_likelihood
 
-        previous_l = l
+        previous_log_likelihood = log_likelihood
         pi, m, S = maximization(X, g)
         if pi is None or m is None or S is None:
             return failure
