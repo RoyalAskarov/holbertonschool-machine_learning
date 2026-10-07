@@ -36,6 +36,6 @@ def pdf(X, m, S):
     log_P = -0.5 * (
         d * np.log(2 * np.pi) + log_det + squared_distances
     )
-    P = np.exp(np.maximum(log_P, np.log(1e-300)))
-
+    P = np.exp(log_P)
     return np.maximum(P, 1e-300)
+
