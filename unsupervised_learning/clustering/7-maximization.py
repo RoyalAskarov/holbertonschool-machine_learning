@@ -25,13 +25,13 @@ def maximization(X, g):
 
     if k == 0 or g.shape[1] != n:
         return None, None, None
-    if not np.all(np.isfinite(g)) or np.any(g < 0):
+    if not np.all(np.isfinite(g)):
         return None, None, None
     if not np.allclose(np.sum(g, axis=0), 1):
         return None, None, None
 
     counts = np.sum(g, axis=1)
-    if np.any(counts <= 0):
+    if np.any(counts == 0):
         return None, None, None
 
     pi = counts / n
