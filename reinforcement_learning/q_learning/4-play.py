@@ -1,37 +1,33 @@
 #!/usr/bin/env python3
-"""Defines the `play` function for a trained agent on FrozenLake."""
+"""Play a FrozenLake episode using a trained Q-table."""
 import numpy as np
 
 
 def play(env, Q, max_steps=100):
-    """Plays an episode of Frozen Lake using a trained agent exploiting Q."""
+    """
+    Play an episode by always choosing the highest-valued action.
 
-    # Reset environment safely
-    reset_val = env.reset()
-    # Handle both Gymnasium (returns tuple) and older Gym (returns int)
-    state = reset_val[0] if isinstance(reset_val, tuple) else reset_val
+    Args:
+        env: FrozenLake environment with render_mode="ansi".
+        Q: Q-table containing action values for each state.
+        max_steps: Maximum number of steps in the episode.
 
+    Returns:
+        total_rewards: Total reward earned during the episode.
+        rendered_outputs: Board frames, including initial and final states.
+    """
+    state, _ = env.reset()
+    total_rewards = 0.0
     rendered_outputs = [env.render()]
 
-    total_rewards = 0.0
-
     for _ in range(max_steps):
-        # Always exploit the Q-table
-        action = np.argmax(Q[state])
-
-        step_val = env.step(action)
-
-        # Unpack safely for both Gymnasium (5 variables) and Gym (4 variables)
-        if len(step_val) == 5:
-            state, reward, terminated, truncated, _ = step_val
-            done = terminated or truncated
-        else:
-            state, reward, done, _ = step_val
+        action = int(np.argmax(Q[state]))
+        state, reward, terminated, truncated, _ = env.step(action)
 
         total_rewards += reward
         rendered_outputs.append(env.render())
 
-        if done:
+        if terminated or truncated:
             break
 
     return total_rewards, rendered_outputs
