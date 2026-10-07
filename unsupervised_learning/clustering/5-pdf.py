@@ -38,4 +38,3 @@ def pdf(X, m, S):
     )
     P = np.exp(log_P)
     return np.maximum(P, 1e-300)
-
