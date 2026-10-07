@@ -4,7 +4,7 @@ import gymnasium as gym
 
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
-    """Loads the FrozenLakeEnv environment from Gymnasium."""
+    """Load the FrozenLake environment with text-based rendering."""
     if desc is None and map_name is None:
         map_name = '8x8'
 
