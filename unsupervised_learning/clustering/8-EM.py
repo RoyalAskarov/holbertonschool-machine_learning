@@ -56,8 +56,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5,
 
         if verbose and (i % 10 == 0 or finished):
             print(
-                "Log Likelihood after {} iterations: {:.5f}".format(
-                    i, log_likelihood
+                "Log Likelihood after {} iterations: {}".format(
+                    i, round(log_likelihood, 5)
                 )
             )
 
