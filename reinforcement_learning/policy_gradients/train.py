@@ -1,36 +1,52 @@
 #!/usr/bin/env python3
-"""Training loop for policy gradients"""
+"""Train an agent using Monte Carlo policy gradients."""
 import numpy as np
+
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
-def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
-    """Train a policy on env using Monte-Carlo policy gradient"""
-    weight = np.random.rand(4, 2)
+def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
+    """
+    Train an agent using the REINFORCE algorithm.
+
+    Args:
+        env: Environment instance.
+        nb_episodes: Number of training episodes.
+        alpha: Learning rate.
+        gamma: Discount factor.
+
+    Returns:
+        List containing the total reward for each episode.
+    """
+    weight = np.random.rand(
+        env.observation_space.shape[0], env.action_space.n
+    )
     scores = []
 
     for episode in range(nb_episodes):
         state, _ = env.reset()
-        rewards = []
         gradients = []
-        done = False
+        rewards = []
+        score = 0.0
 
-        while not done:
-            if show_result and episode % 1000 == 0:
-                env.render()
-            action, grad = policy_gradient(state, weight)
+        while True:
+            action, gradient = policy_gradient(state, weight)
             state, reward, terminated, truncated, _ = env.step(action)
-            done = terminated or truncated
-            gradients.append(grad)
+
+            gradients.append(gradient)
             rewards.append(reward)
+            score += reward
 
-        score = sum(rewards)
+            if terminated or truncated:
+                break
+
+        total_return = 0.0
+
+        for gradient, reward in zip(reversed(gradients), reversed(rewards)):
+            total_return = reward + gamma * total_return
+            weight += alpha * total_return * gradient
+
         scores.append(score)
-
-        for t, grad in enumerate(gradients):
-            Gt = sum(R * gamma ** i for i, R in enumerate(rewards[t:]))
-            weight += alpha * grad * Gt
-
         print("Episode: {} Score: {}".format(episode, score))
 
     return scores
